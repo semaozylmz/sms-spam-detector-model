@@ -17,6 +17,7 @@ Bu proje, Scikit-learn kütüphanesi kullanılarak geliştirilmiş, İngilizce S
 .
 ├── spam_model.pkl          # Eğitilmiş Naive Bayes modeli
 ├── vectorizer.pkl          # Eğitilmiş TF-IDF vektörleştiricisi
+├── spam.csv 
 ├── Spam_SMS_Collection.ipynb # Modelin geliştirildiği ve eğitildiği Jupyter Notebook
 └── README.md               
 ```
