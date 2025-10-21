@@ -1,57 +1,63 @@
-# SMS Spam Tespit Modeli (SMS Spam Detection Model)
+# 📱 SMS Spam Detection Model
 
-Bu proje, Scikit-learn kütüphanesi kullanılarak geliştirilmiş, İngilizce SMS metinlerini **spam** veya **ham** (spam olmayan) olarak sınıflandıran bir makine öğrenmesi modelidir.
+This project is a machine learning model developed using the **Scikit-learn** library that classifies English SMS messages as either **spam** or **ham** (non-spam).
 
-> Bu model, [UCI SMS Spam Collection Dataset](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset) veri seti üzerinde eğitilmiştir.
+> The model was trained on the [UCI SMS Spam Collection Dataset](https://www.kaggle.com/datasets/uciml/sms-spam-collection-dataset)
 
-## ✨ Temel Özellikler
+## ✨ Key Features
 
-- **Yüksek Doğruluk:** Test verisi üzerinde **~%97** doğruluk oranına sahiptir.
-- **Kullanıcı Odaklı:** Normal mesajları spam olarak etiketleme oranı sıfırdır (**0 False Positive**). Bu sayede önemli bir mesajın spam kutusuna düşme riskini en aza indirir.
-- **Hafif ve Hızlı:** Model dosyaları sadece birkaç megabayttır ve tahmin işlemi milisaniyeler içinde gerçekleşir. Gerçek zamanlı uygulamalar için uygundur.
-- **Basit Entegrasyon:** Herhangi bir Python projesine kolayca entegre edilebilir.
+- **High Accuracy:** Achieves around **97% accuracy** on the test dataset.  
+- **User-Friendly:** Has **0 false positives**, meaning no normal message is misclassified as spam — minimizing the risk of important messages being flagged incorrectly.  
+- **Lightweight & Fast:** Model files are only a few megabytes, and predictions are made in milliseconds — ideal for real-time applications.  
+- **Easy Integration:** Can be easily integrated into any Python project.
 
-## 📂 Proje Yapısı
+---
+
+## 📂 Project Structure
 
 ```
 .
-├── spam_model.pkl          # Eğitilmiş Naive Bayes modeli
-├── vectorizer.pkl          # Eğitilmiş TF-IDF vektörleştiricisi
+├── spam_model.pkl          # Trained Naive Bayes model
+├── vectorizer.pkl          # Trained TF-IDF vectorizer
 ├── spam.csv 
-├── Spam_SMS_Collection.ipynb # Modelin geliştirildiği ve eğitildiği Jupyter Notebook
+├── Spam_SMS_Collection.ipynb  # Jupyter Notebook for model training and development
 └── README.md               
 ```
 
-## 🚀 Kurulum ve Başlangıç
 
-Bu projeyi yerel makinenizde çalıştırmak için aşağıdaki adımları izleyin.
+---
 
-**1. Projeyi Klonlayın:**
+## 🚀 Installation & Setup
+
+Follow these steps to run the project locally:
+
+**1. Clone the repository:**
 ```bash
-git clone [https://github.com/](https://github.com/)[KULLANICI_ADIN]/[REPO_ADIN].git
-cd [REPO_ADIN]
+git clone [https://github.com/](https://github.com/)[USERNAME]/[REPO_NAME].git
+cd [REPO_NAME]
+
 ```
 
-**2. Gerekli Kütüphaneleri Yükleyin:**
-Proje bağımlılıklarını `requirements.txt` dosyasını kullanarak yüklemeniz önerilir.
+**2.Install the required libraries:
+Use the requirements.txt file to install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
-Eğer `requirements.txt` dosyanız yoksa, aşağıdaki kütüphaneleri manuel olarak yükleyebilirsiniz:
+If you don’t have a requirements.txt file, you can manually install the libraries:
 ```bash
 pip install pandas numpy scikit-learn nltk
 ```
 
-**3. NLTK Stopwords İndirmesi:**
-Modelin metin temizleme adımı için NLTK'nın `stopwords` listesine ihtiyacı vardır. Aşağıdaki komutları bir Python yorumlayıcısında çalıştırarak listeyi indirin:
+**3.Download NLTK Stopwords:
+The model requires NLTK’s stopwords list for text preprocessing. Run the following commands in a Python interpreter:
 ```python
 import nltk
 nltk.download('stopwords')
 ```
 
-## 💻 Kullanım Örneği
-
-Modeli kendi projenizde kullanmak çok kolaydır. Aşağıdaki `example.py` dosyasındaki gibi, kaydedilmiş `vectorizer.pkl` ve `spam_model.pkl` dosyalarını yükleyerek tahmin yapabilirsiniz.
+## 💻 Example Usage
+You can easily use the trained model in your own Python project.
+Example (example.py):
 
 ```python
 # example.py
@@ -59,55 +65,58 @@ import pickle
 
 def predict_spam(message: str) -> str:
     """
-    Verilen tek bir mesaj için spam tahmini yapar.
+    Predicts whether a given message is spam or not.
     """
     try:
-        # Kaydedilmiş vektörleştiriciyi ve modeli yükle
+        # Load the saved vectorizer and model
         with open('vectorizer.pkl', 'rb') as f:
             vectorizer = pickle.load(f)
         
         with open('spam_model.pkl', 'rb') as f:
             model = pickle.load(f)
     except FileNotFoundError:
-        return "Hata: Model dosyaları ('vectorizer.pkl', 'spam_model.pkl') bulunamadı."
+        return "Error: Model files ('vectorizer.pkl', 'spam_model.pkl') not found."
 
-    # Gelen mesajı vektörleştirici ile dönüştür (bir liste içinde olmalı)
+    # Transform the input message using the vectorizer
     message_tfidf = vectorizer.transform([message])
     
-    # Tahmini yap
+    # Make prediction
     prediction = model.predict(message_tfidf)
     
     return prediction[0].upper()
 
 # --- Test ---
-spam_mesaj = "Congratulations! You've won a $1000 Walmart gift card. Go to [http://example.com](http://example.com) to claim now."
-normal_mesaj = "Hi mom, I'll be home late for dinner tonight. Can you save me some food?"
+spam_message = "Congratulations! You've won a $1000 Walmart gift card. Go to http://example.com to claim now."
+normal_message = "Hi mom, I'll be home late for dinner tonight. Can you save me some food?"
 
-print(f"Mesaj: '{spam_mesaj}'")
-print(f"  -> Tahmin: {predict_spam(spam_mesaj)}\n")
+print(f"Message: '{spam_message}'")
+print(f"  -> Prediction: {predict_spam(spam_message)}\n")
 
-print(f"Mesaj: '{normal_mesaj}'")
-print(f"  -> Tahmin: {predict_spam(normal_mesaj)}")
+print(f"Message: '{normal_message}'")
+print(f"  -> Prediction: {predict_spam(normal_message)}")
+
 ```
 
-## 📊 Model Performansı
+## 📊 Model Performance
+The model was evaluated on 20% of the dataset (test set).
+Here are the results:
 
-Model, test verisinin %20'si üzerinde değerlendirilmiştir. Elde edilen sonuçlar:
-
-| Metrik | Değer |
-| :--- | :--- |
-| **Doğruluk (Accuracy)** | %96.77 |
-| **Normal Mesaj Başarısı (Ham Precision)** | %96 |
-| **Spam Mesaj Başarısı (Spam Precision)** | %100 |
-| **Normal Mesaj → Spam (False Positives)** | **0** |
+| Metric                           | Value  |
+| :------------------------------- | :----- |
+| **Accuracy**                     | 96.77% |
+| **Ham Precision**                | 96%    |
+| **Spam Precision**               | 100%   |
+| **False Positives (Ham → Spam)** | **0**  |
 
 
-## ⚠️ Sınırlamalar
 
-- **Dil:** Model sadece **İngilizce** metinler için tasarlanmıştır.
-- **Format:** En iyi performansı SMS gibi kısa metinlerde gösterir. Uzun e-postalar veya farklı formattaki metinler için performansı düşebilir.
-- **Kullanım Amacı:** Modelin, mesajları otomatik olarak silmek yerine, kullanıcıya "spam olabilir" şeklinde bir uyarı göstermesi önerilir.
+## ⚠️ Limitations
+Language: Designed exclusively for English text messages.
+Format: Works best with short texts such as SMS. May perform less effectively on long emails or other formats.
+Usage Purpose: It is recommended to flag messages as “possible spam” instead of deleting them automatically.
 
-## 📄 Lisans
+## 📄 License
+This project is licensed under the Apache 2.0 License.
+See the LICENSE file for more details.
 
-Bu proje **Apache 2.0** Lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosyasına bakınız.
+Developed by Nora
