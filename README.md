@@ -119,4 +119,4 @@ Usage Purpose: It is recommended to flag messages as “possible spam” instead
 This project is licensed under the Apache 2.0 License.
 See the LICENSE file for more details.
 
-Developed by Nora
+...by Vira
